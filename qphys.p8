@@ -106,15 +106,15 @@ function ball:new(o)
 	ball.__count += 1
 	local o = o or {}
 	o.id = ball.__count
-	o.col = o.id % 16
+	o.col = o.col or o.id % 16
 	setmetatable(o, self)
 	o.__index = self
 	return o
 end
 
 -->8
-ball_count = 16
-ball_radius = 5
+ball_count = 10
+max_radius = 8
 
 function _init()
 	balls = {}
@@ -123,9 +123,8 @@ function _init()
 		add(balls, ball:new({
 			pos=vec2:new(rnd(127),rnd(127)),
 			vel=vec2:new(rnd(2)-1,rnd(2)-1):normal(),
-			rad=ball_radius,
-      col=rnd(15)+1
-		}))
+			rad=2+flr(rnd(max_radius)),
+    }))
 	end
 end
 
@@ -158,10 +157,10 @@ function handle_collisions()
  	 local t_xpoint = target.pos
  	 repeat
  			steps += 1
- 			rewind += 0.1 * steps
+ 			rewind = 0.1 * steps
  			s_xpoint = source.pos - source.vel * rewind
  			t_xpoint = target.pos - target.vel * rewind
- 		until (s_xpoint - t_xpoint):mag() >= source.rad + target.rad					
+ 		until rewind > 1 or (s_xpoint - t_xpoint):mag() >= source.rad + target.rad					
     local s_newvel = collision_vel(s_xpoint, source.vel, t_xpoint, target.vel)
  		local t_newvel = collision_vel(t_xpoint, target.vel, s_xpoint, source.vel)
  		source.pos = s_xpoint + source.vel * rewind

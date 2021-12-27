@@ -49,7 +49,7 @@ function ball:new(o)
 	ball.__count += 1
 	local o = o or {}
 	o.id = ball.__count
-	o.col = o.id % 16
+	o.col = o.col or o.id % 16
 	setmetatable(o, self)
 	o.__index = self
 	return o
