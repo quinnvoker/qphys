@@ -1,7 +1,8 @@
 {
-    "picoFile":"qphys.p8",
-    
-    "sources":[
-        "main.lua"
-    ]
+  "picoFile":"qphys.p8",
+  "sources":[
+    "vec2.lua",
+    "ball.lua",
+    "main.lua"
+  ]
 }
