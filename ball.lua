@@ -2,6 +2,7 @@ ball = {
 	__count = 0,
 	id = nil,
 	pos = vec2:new(0,0),
+  last_pos = vec2:new(0,0),
 	vel = vec2:new(0,0),
 	rad = 1,
 	col = 7,
@@ -10,11 +11,15 @@ ball = {
     return self.rad
   end,
 	
-	draw = function(self)
+	draw = function(self, shadow)
+    if (shadow == true) then
+      circfill(self.last_pos.x, self.last_pos.y, self.rad, self.col + 8)
+    end
 		circfill(self.pos.x, self.pos.y, self.rad, self.col)
 	end,
 	
 	move = function(self)
+    self.last_pos = self.pos
 		self.pos += self.vel
 	end,
 	
@@ -53,7 +58,7 @@ function ball:new(o)
 	ball.__count += 1
 	local o = o or {}
 	o.id = ball.__count
-	o.col = o.col or o.id % 16
+	o.col = o.col or o.id % 8
 	setmetatable(o, self)
 	o.__index = self
 	return o

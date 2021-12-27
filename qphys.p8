@@ -59,6 +59,7 @@ ball = {
 	__count = 0,
 	id = nil,
 	pos = vec2:new(0,0),
+  last_pos = vec2:new(0,0),
 	vel = vec2:new(0,0),
 	rad = 1,
 	col = 7,
@@ -67,11 +68,15 @@ ball = {
     return self.rad
   end,
 	
-	draw = function(self)
+	draw = function(self, shadow)
+    if (shadow == true) then
+      circfill(self.last_pos.x, self.last_pos.y, self.rad, self.col + 8)
+    end
 		circfill(self.pos.x, self.pos.y, self.rad, self.col)
 	end,
 	
 	move = function(self)
+    self.last_pos = self.pos
 		self.pos += self.vel
 	end,
 	
@@ -110,24 +115,28 @@ function ball:new(o)
 	ball.__count += 1
 	local o = o or {}
 	o.id = ball.__count
-	o.col = o.col or o.id % 16
+	o.col = o.col or o.id % 8
 	setmetatable(o, self)
 	o.__index = self
 	return o
 end
 
 -->8
-ball_count = 10
-max_radius = 8
+pal()
+cls()
+
+ball_count = 16
+max_radius = 16
 
 function _init()
-	balls = {}
+  pal({9,10,11,12,13,2,15,136,137,138,139,140,141,130,143,8},1)
+  balls = {}
 	collisions = {}
 	for i=1,ball_count do
 		add(balls, ball:new({
 			pos=vec2:new(rnd(127),rnd(127)),
 			vel=vec2:new(rnd(2)-1,rnd(2)-1):normal(),
-			rad=2+flr(rnd(max_radius)),
+			rad = i < max_radius and i or max_radius,
     }))
 	end
 end
@@ -145,9 +154,9 @@ function _update60()
 end	
 
 function _draw()
-	cls()
+	-- cls()
 	for b in all(balls) do
-		b:draw()
+		b:draw(true)
 	end
 end
 

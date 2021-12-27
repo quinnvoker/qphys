@@ -1,14 +1,18 @@
-ball_count = 10
-max_radius = 8
+pal()
+cls()
+
+ball_count = 16
+max_radius = 16
 
 function _init()
-	balls = {}
+  pal({9,10,11,12,13,2,15,136,137,138,139,140,141,130,143,8},1)
+  balls = {}
 	collisions = {}
 	for i=1,ball_count do
 		add(balls, ball:new({
 			pos=vec2:new(rnd(127),rnd(127)),
 			vel=vec2:new(rnd(2)-1,rnd(2)-1):normal(),
-			rad=2+flr(rnd(max_radius)),
+			rad = i < max_radius and i or max_radius,
     }))
 	end
 end
@@ -26,9 +30,9 @@ function _update60()
 end	
 
 function _draw()
-	cls()
+	-- cls()
 	for b in all(balls) do
-		b:draw()
+		b:draw(true)
 	end
 end
 
