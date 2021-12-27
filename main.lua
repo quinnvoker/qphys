@@ -8,7 +8,8 @@ function _init()
 		add(balls, ball:new({
 			pos=vec2:new(rnd(127),rnd(127)),
 			vel=vec2:new(rnd(2)-1,rnd(2)-1):normal(),
-			col=rnd(15)+1
+			rad=ball_radius,
+      col=rnd(15)+1
 		}))
 	end
 end
@@ -46,10 +47,12 @@ function handle_collisions()
  			s_xpoint = source.pos - source.vel * rewind
  			t_xpoint = target.pos - target.vel * rewind
  		until (s_xpoint - t_xpoint):mag() >= source.rad + target.rad					
- 		source.vel = collision_vel(s_xpoint, source.vel, t_xpoint, target.vel)
- 		target.vel = collision_vel(t_xpoint, target.vel, s_xpoint, source.vel)
+    local s_newvel = collision_vel(s_xpoint, source.vel, t_xpoint, target.vel)
+ 		local t_newvel = collision_vel(t_xpoint, target.vel, s_xpoint, source.vel)
  		source.pos = s_xpoint + source.vel * rewind
- 		target.pos = t_xpoint + target.vel * rewind 
+ 		target.pos = t_xpoint + target.vel * rewind
+    source.vel = s_newvel
+    target.vel = t_newvel
 		end
 	end
 end				
