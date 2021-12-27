@@ -6,8 +6,8 @@ ball = {
 	rad = 1,
 	col = 7,
   
-  mass = function()
-    return rad
+  mass = function(self)
+    return self.rad
   end,
 	
 	draw = function(self)
