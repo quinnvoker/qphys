@@ -5,6 +5,10 @@ ball = {
 	vel = vec2:new(0,0),
 	rad = 1,
 	col = 7,
+  
+  mass = function()
+    return rad
+  end,
 	
 	draw = function(self)
 		circfill(self.pos.x, self.pos.y, self.rad, self.col)

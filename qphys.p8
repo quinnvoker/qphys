@@ -62,6 +62,10 @@ ball = {
 	vel = vec2:new(0,0),
 	rad = 1,
 	col = 7,
+  
+  mass = function()
+    return rad
+  end,
 	
 	draw = function(self)
 		circfill(self.pos.x, self.pos.y, self.rad, self.col)
@@ -160,9 +164,9 @@ function handle_collisions()
  			rewind = 0.1 * steps
  			s_xpoint = source.pos - source.vel * rewind
  			t_xpoint = target.pos - target.vel * rewind
- 		until rewind > 1 or (s_xpoint - t_xpoint):mag() >= source.rad + target.rad					
-    local s_newvel = collision_vel(s_xpoint, source.vel, t_xpoint, target.vel)
- 		local t_newvel = collision_vel(t_xpoint, target.vel, s_xpoint, source.vel)
+ 		until rewind > 1 or (s_xpoint - t_xpoint):mag() >= source.rad + target.rad
+    local s_newvel = collision_vel(s_xpoint, source.vel, t_xpoint, target.vel, source.mass(), target.mass())
+ 		local t_newvel = collision_vel(t_xpoint, target.vel, s_xpoint, source.vel, target.mass(), source.mass())
  		source.pos = s_xpoint + source.vel * rewind
  		target.pos = t_xpoint + target.vel * rewind
     source.vel = s_newvel
@@ -171,10 +175,12 @@ function handle_collisions()
 	end
 end				
 
-function collision_vel(x1,v1,x2,v2)
+function collision_vel(x1,v1,x2,v2,m1,m2)
+    m1 = m1 or 1
+    m2 = m2 or 1
 		local x_diff = x1 - x2
 		local v_diff = v1 - v2
-		return v1 - x_diff * v_diff:dot(x_diff) / x_diff:mag()^2
+		return v1 - x_diff * (2 * m2 / (m1 + m2))  * v_diff:dot(x_diff) / x_diff:mag()^2
 end
 
 __gfx__
