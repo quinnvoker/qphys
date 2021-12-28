@@ -27,7 +27,17 @@ vec2 = {
 vec2.__eq = function(v1,v2) return v1.x == v2.x and v1.y == v2.y end
 vec2.__add = function(v1,v2) return vec2:new(v1.x+v2.x,v1.y+v2.y) end
 vec2.__sub = function(v1,v2) return vec2:new(v1.x-v2.x,v1.y-v2.y) end
-vec2.__mul = function(v,s) return vec2:new(v.x*s,v.y*s) end
+vec2.__mul = function(o1,o2)
+  local s,v
+  if(tonum(o1)) then
+    s = o1
+    v = o2
+  else
+    s = o2
+    v = o1
+  end
+  return vec2:new(v.x*s,v.y*s)
+end
 vec2.__div = function(v,s) return vec2:new(v.x/s,v.y/s) end
 vec2.__unm = function(v) return vec2:new(-v.x,-v.y) end
 vec2.__tostring = function(v) return "{x: "..v.x..",y: "..v.y.."}" end
@@ -52,6 +62,11 @@ function vec2:print_debug(v)
 	print("inv: "..vec2.__tostring(-self))
 end
 
+local v = vec2:new(1,1)
+local s = 3
+print(v * s)
+print(s * v)
+assert(false, "If two lines above are identical, mul operands are now interchangeable!")
 
 -->8
 ball = {
