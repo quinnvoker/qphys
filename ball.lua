@@ -44,7 +44,7 @@ ball = {
 		for b in all(balls) do
 			if (b.id != self.id and (collisions[b] == nil or collisions[b][self] == nil)) then
 				local diff = self.pos - b.pos
-				if ((diff):mag() < self.rad + b.rad) then
+				if (diff:length() < self.rad + b.rad) then
 				 collisions[self] = collisions[self] or {}
 				 collisions[self][b] = diff
 				end

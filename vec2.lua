@@ -2,7 +2,11 @@ vec2 = {
 	x = 0,
 	y = 0,
 	
-	mag = function(self)
+  angle = function(self)
+    return atan2(y, x);
+  end,
+
+	length = function(self)
 	 return sqrt(self.x^2+self.y^2)
 	end,
 	
@@ -10,12 +14,12 @@ vec2 = {
 		return self.x * v.x + self.y * v.y
 	end,
 	
-	normal	= function(self)
-		local mag = self:mag()
-		return vec2:new(self.x/mag, self.y/mag)
+	normal = function(self)
+		local length = self:length()
+		return vec2:new(self.x/length, self.y/length)
 	end,
 	
-	bounce = function(self, n)
+  bounce = function(self, n)
 		local n = n:normal()
 		return n * -2 * self:dot(n) + self
 	end,
@@ -52,15 +56,9 @@ end
 function vec2:print_debug(v)
 	local v = v or vec2:new(0,1)
 	print("vec: "..vec2.__tostring(self))
-	print("mag: "..self:mag())
+	print("length: "..self:length())
 	print("dot: "..self:dot(v))
 	print("normal: "..vec2.__tostring(self:normal()))
 	print("bounce: "..vec2.__tostring(self:bounce(v)))
 	print("inv: "..vec2.__tostring(-self))
 end
-
-local v = vec2:new(1,1)
-local s = 3
-print(v * s)
-print(s * v)
-assert(false, "If two lines above are identical, mul operands are now interchangeable!")

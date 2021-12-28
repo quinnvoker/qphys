@@ -5,7 +5,11 @@ vec2 = {
 	x = 0,
 	y = 0,
 	
-	mag = function(self)
+  angle = function(self)
+    return atan2(y, x);
+  end,
+
+	length = function(self)
 	 return sqrt(self.x^2+self.y^2)
 	end,
 	
@@ -13,12 +17,12 @@ vec2 = {
 		return self.x * v.x + self.y * v.y
 	end,
 	
-	normal	= function(self)
-		local mag = self:mag()
-		return vec2:new(self.x/mag, self.y/mag)
+	normal = function(self)
+		local length = self:length()
+		return vec2:new(self.x/length, self.y/length)
 	end,
 	
-	bounce = function(self, n)
+  bounce = function(self, n)
 		local n = n:normal()
 		return n * -2 * self:dot(n) + self
 	end,
@@ -55,18 +59,12 @@ end
 function vec2:print_debug(v)
 	local v = v or vec2:new(0,1)
 	print("vec: "..vec2.__tostring(self))
-	print("mag: "..self:mag())
+	print("length: "..self:length())
 	print("dot: "..self:dot(v))
 	print("normal: "..vec2.__tostring(self:normal()))
 	print("bounce: "..vec2.__tostring(self:bounce(v)))
 	print("inv: "..vec2.__tostring(-self))
 end
-
-local v = vec2:new(1,1)
-local s = 3
-print(v * s)
-print(s * v)
-assert(false, "If two lines above are identical, mul operands are now interchangeable!")
 
 -->8
 ball = {
@@ -115,7 +113,7 @@ ball = {
 		for b in all(balls) do
 			if (b.id != self.id and (collisions[b] == nil or collisions[b][self] == nil)) then
 				local diff = self.pos - b.pos
-				if ((diff):mag() < self.rad + b.rad) then
+				if (diff:length() < self.rad + b.rad) then
 				 collisions[self] = collisions[self] or {}
 				 collisions[self][b] = diff
 				end
@@ -187,7 +185,7 @@ function handle_collisions()
  			rewind = 0.1 * steps
  			s_xpoint = source.pos - source.vel * rewind
  			t_xpoint = target.pos - target.vel * rewind
- 		until rewind > 1 or (s_xpoint - t_xpoint):mag() >= source.rad + target.rad
+ 		until rewind > 1 or (s_xpoint - t_xpoint):length() >= source.rad + target.rad
     local s_newvel = collision_vel(s_xpoint, source.vel, t_xpoint, target.vel, source:mass(), target:mass())
  		local t_newvel = collision_vel(t_xpoint, target.vel, s_xpoint, source.vel, target:mass(), source:mass())
  		source.pos = s_xpoint + source.vel * rewind
@@ -203,7 +201,7 @@ function collision_vel(x1,v1,x2,v2,m1,m2)
     m2 = m2 or 1
 		local x_diff = x1 - x2
 		local v_diff = v1 - v2
-		return v1 - x_diff * (2 * m2 / (m1 + m2))  * v_diff:dot(x_diff) / x_diff:mag()^2
+		return v1 - x_diff * (2 * m2 / (m1 + m2))  * v_diff:dot(x_diff) / x_diff:length()^2
 end
 
 __gfx__
