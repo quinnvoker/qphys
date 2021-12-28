@@ -15,10 +15,9 @@ vec2 = {
 		return vec2:new(self.x/mag, self.y/mag)
 	end,
 	
-	bounce = function(self, n, b)
-		local b = b or 1
+	bounce = function(self, n)
 		local n = n:normal()
-		return (n * -2 * self:dot(n) + self) * b
+		return n * -2 * self:dot(n) + self
 	end,
 }
 
