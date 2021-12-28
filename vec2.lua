@@ -15,8 +15,7 @@ vec2 = {
 	end,
 	
 	normal = function(self)
-		local length = self:length()
-		return vec2:new(self.x/length, self.y/length)
+		return vec2:new(self.x/#self, self.y/#self)
 	end,
 	
   bounce = function(self, n)
@@ -41,6 +40,7 @@ vec2.__mul = function(o1,o2)
 end
 vec2.__div = function(v,s) return vec2:new(v.x/s,v.y/s) end
 vec2.__unm = function(v) return vec2:new(-v.x,-v.y) end
+vec2.__len = function(v) return v:length() end 
 vec2.__tostring = function(v) return "{x: "..v.x..",y: "..v.y.."}" end
 vec2.__index = vec2
 

@@ -49,7 +49,7 @@ function handle_collisions()
  			rewind = 0.1 * steps
  			s_xpoint = source.pos - source.vel * rewind
  			t_xpoint = target.pos - target.vel * rewind
- 		until rewind > 1 or (s_xpoint - t_xpoint):length() >= source.rad + target.rad
+ 		until rewind > 1 or #(s_xpoint - t_xpoint) >= source.rad + target.rad
     local s_newvel = collision_vel(s_xpoint, source.vel, t_xpoint, target.vel, source:mass(), target:mass())
  		local t_newvel = collision_vel(t_xpoint, target.vel, s_xpoint, source.vel, target:mass(), source:mass())
  		source.pos = s_xpoint + source.vel * rewind
@@ -65,5 +65,5 @@ function collision_vel(x1,v1,x2,v2,m1,m2)
     m2 = m2 or 1
 		local x_diff = x1 - x2
 		local v_diff = v1 - v2
-		return v1 - x_diff * (2 * m2 / (m1 + m2))  * v_diff:dot(x_diff) / x_diff:length()^2
+		return v1 - x_diff * (2 * m2 / (m1 + m2))  * v_diff:dot(x_diff) / (#x_diff)^2
 end
